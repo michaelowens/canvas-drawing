@@ -91,9 +91,16 @@ var Helpers = {},
             dx,
             dy;
 
-        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.globalCompositeOperation = "source-over";
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.lineWidth = 1;
         if (Toolbar.activeTool === 'pencil') {
-            ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 1)';
+        }
+        if (Toolbar.activeTool === 'eraser') {
+            ctx.globalCompositeOperation = "destination-out";
+            ctx.strokeStyle = "rgba(0, 0, 0, 1)";
+            ctx.lineWidth = 15;
         }
 
         ctx.beginPath();
@@ -101,31 +108,33 @@ var Helpers = {},
         ctx.lineTo(last_point.x, last_point.y);
         ctx.stroke();
 
-        while (len--) {
-            current_point = points[len];
+        if (Toolbar.activeTool === 'brush1') {
+            while (len--) {
+                current_point = points[len];
 
-            dx = current_point.x - last_point.x;
-            dy = current_point.y - last_point.y;
+                dx = current_point.x - last_point.x;
+                dy = current_point.y - last_point.y;
 
-            d = dx * dx + dy * dy;
+                d = dx * dx + dy * dy;
 
-            if (Toolbar.activeTool === 'brush1') {
-                // nearest neighbor
-                if (d < 1000) {
-                    ctx.beginPath();
-                    ctx.moveTo(last_point.x + (dx * 0.2), last_point.y + (dy * 0.2));
-                    ctx.lineTo(current_point.x - (dx * 0.2), current_point.y - (dy * 0.2));
-                    ctx.stroke();
+                if (Toolbar.activeTool === 'brush1') {
+                    // nearest neighbor
+                    if (d < 1000) {
+                        ctx.beginPath();
+                        ctx.moveTo(last_point.x + (dx * 0.2), last_point.y + (dy * 0.2));
+                        ctx.lineTo(current_point.x - (dx * 0.2), current_point.y - (dy * 0.2));
+                        ctx.stroke();
+                    }
                 }
-            }
 
-            // nearest neighbor furry
-//            if (d < 2000 && Math.random() > d / 2000) {
-//                ctx.beginPath();
-//                ctx.moveTo(last_point.x + (dx * 0.5), last_point.y + (dy * 0.5));
-//                ctx.lineTo(last_point.x - (dx * 0.5), last_point.y - (dy * 0.5));
-//                ctx.stroke();
-//            }
+                // nearest neighbor furry
+//                if (d < 2000 && Math.random() > d / 2000) {
+//                    ctx.beginPath();
+//                    ctx.moveTo(last_point.x + (dx * 0.5), last_point.y + (dy * 0.5));
+//                    ctx.lineTo(last_point.x - (dx * 0.5), last_point.y - (dy * 0.5));
+//                    ctx.stroke();
+//                }
+            }
         }
     };
 
