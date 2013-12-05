@@ -1,21 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Canvas</title>
+    <title>Canvas</title>
 
+    <link rel="stylesheet" href="css/font-awesome.min.css"/>
     <style type="text/css">
         body, html {
             height: 100%;
-        }
-        body {
-            background: #3498DB;
             margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            background: #ddd;
+        }
+
+        * {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        canvas {
+            background: #3498DB;
+            border-right: 2px solid #aaa;
+            margin: 0;
+            padding: 0;
+            cursor: crosshair;
+        }
+
+        .toolbar {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 48px;
+            font-size: 30px;
+        }
+
+        .toolbar .btn {
+            background: #d6d6d6;
+            border-bottom: 2px solid #ccc;
+            width: 100%;
+            text-align: center;
+            padding: 5px;
+            display: block;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .toolbar .btn.active,
+        .toolbar .btn:hover {
+            color: #000;
         }
     </style>
 </head>
 <body>
+
 <canvas id="drawing"></canvas>
 
+<div class="toolbar">
+    <span tool="pencil" class="btn active fa fa-pencil"></span>
+    <span tool="brush1" class="btn fa fa-certificate"></span>
+    <span tool="eraser" class="btn fa fa-eraser"></span>
+</div>
+
 <script src="script.js"></script>
+
 </body>
 </html>
