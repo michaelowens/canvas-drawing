@@ -13,7 +13,6 @@
         }
 
         body {
-            background: #ddd;
         }
 
         * {
@@ -24,7 +23,6 @@
 
         canvas {
             background: #3498DB;
-            border-right: 2px solid #aaa;
             margin: 0;
             padding: 0;
             cursor: crosshair;
@@ -35,27 +33,30 @@
         }
 
         .toolbar {
+            background: #34495e;
+            border-left: 2px solid #2c3e50;
             position: absolute;
             top: 0;
             right: 0;
-            width: 48px;
+            bottom: 0;
+            width: 50px;
             font-size: 30px;
         }
 
         .toolbar .btn {
-            background: #d6d6d6;
-            border-bottom: 2px solid #ccc;
+            /*background: #d6d6d6;*/
+            border-bottom: 2px solid #2c3e50;
             width: 100%;
             text-align: center;
-            padding: 5px;
+            padding: 10px 5px;
             display: block;
             cursor: pointer;
-            color: #999;
+            color: #bdc3c7;
         }
 
         .toolbar .btn.active,
         .toolbar .btn:hover {
-            color: #000;
+            color: #fff;
         }
     </style>
 </head>

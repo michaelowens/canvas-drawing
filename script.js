@@ -1,4 +1,4 @@
-/*jslint browser: true, plusplus: true */
+/*jslint browser: true, plusplus: true, todo: true */
 var Helpers = {},
     Draw = {},
     Toolbar = {};
@@ -8,6 +8,7 @@ var Helpers = {},
  */
 (function (helpers) {
     'use strict';
+
     /**
      * Checks if an element has a class
      * @source http://rockycode.com/blog/addremove-classes-raw-javascript/
@@ -57,60 +58,96 @@ var Helpers = {},
 (function (draw) {
     'use strict';
 
-    var el = document.getElementById('drawing'),
-        ctx = el.getContext('2d'),
-        points = [],
-        isDrawing;
+    draw.points = [];
+    draw.isDrawing = false;
 
+    /**
+     * Initialize the canvas
+     */
     draw.init = function () {
-        el.width = document.body.clientWidth - 50;
-        el.height = document.body.clientHeight;
+        draw.getCanvas();
+        draw.setCanvasSettings();
+        draw.setBindings();
     };
 
-    ctx.lineWidth = 1.2;
-    ctx.lineJoin = ctx.lineCap = 'round';
-
-    el.onmousedown = function (e) {
-        points = [];
-        isDrawing = true;
-        points.push({x: e.clientX, y: e.clientY});
+    /**
+     * Store the canvas element and context
+     */
+    draw.getCanvas = function () {
+        draw.el = document.getElementById('drawing');
+        draw.context = draw.el.getContext('2d');
     };
 
-    el.onmousemove = function (e) {
-        if (!isDrawing) {
+    /**
+     * Sets width, height, default lineWidth and lineJoin for the canvas
+     */
+    draw.setCanvasSettings = function () {
+        draw.el.width = document.body.clientWidth - 50;
+        draw.el.height = document.body.clientHeight;
+
+        draw.context.lineWidth = 1.2;
+        draw.context.lineJoin = draw.context.lineCap = 'round';
+    };
+
+    /**
+     * Sets mouse bindings
+     */
+    draw.setBindings = function () {
+        draw.el.onmousedown = draw.onMouseDown;
+        draw.el.onmousemove = draw.onMouseMove;
+        draw.el.onmouseup = draw.onMouseUp;
+    };
+
+    /**
+     * On mouse down binding
+     * @param e
+     */
+    draw.onMouseDown = function (e) {
+        draw.points = [];
+        draw.isDrawing = true;
+        draw.points.push({x: e.clientX, y: e.clientY});
+    };
+
+    /**
+     * On mouse move binding
+     * TODO: make this b-e-a-utiful
+     * @param e
+     */
+    draw.onMouseMove = function (e) {
+        if (!draw.isDrawing) {
             return;
         }
 
-        points.push({x: e.clientX, y: e.clientY});
+        draw.points.push({x: e.clientX, y: e.clientY});
 
-        var len = points.length,
-            last_point = points[len - 1],
-            second_last_point = points[len - 2],
+        var len = draw.points.length,
+            last_point = draw.points[len - 1],
+            second_last_point = draw.points[len - 2],
             current_point,
             d,
             dx,
             dy;
 
-        ctx.globalCompositeOperation = "source-over";
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-        ctx.lineWidth = 1;
+        draw.context.globalCompositeOperation = "source-over";
+        draw.context.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        draw.context.lineWidth = 1;
         if (Toolbar.activeTool === 'pencil') {
-            ctx.strokeStyle = 'rgba(255, 255, 255, 1)';
+            draw.context.strokeStyle = 'rgba(255, 255, 255, 1)';
         }
         if (Toolbar.activeTool === 'eraser') {
-            ctx.globalCompositeOperation = "destination-out";
-            ctx.strokeStyle = "rgba(0, 0, 0, 1)";
-            ctx.lineWidth = 15;
+            draw.context.globalCompositeOperation = "destination-out";
+            draw.context.strokeStyle = "rgba(0, 0, 0, 1)";
+            draw.context.lineWidth = 15;
         }
 
-        ctx.beginPath();
-        ctx.moveTo(second_last_point.x, second_last_point.y);
-        ctx.lineTo(last_point.x, last_point.y);
-        ctx.stroke();
+        draw.context.beginPath();
+        draw.context.moveTo(second_last_point.x, second_last_point.y);
+        draw.context.lineTo(last_point.x, last_point.y);
+        draw.context.stroke();
 
         if (Toolbar.activeTool === 'brush1') {
             while (len--) {
-                current_point = points[len];
+                current_point = draw.points[len];
 
                 dx = current_point.x - last_point.x;
                 dy = current_point.y - last_point.y;
@@ -120,27 +157,30 @@ var Helpers = {},
                 if (Toolbar.activeTool === 'brush1') {
                     // nearest neighbor
                     if (d < 1000) {
-                        ctx.beginPath();
-                        ctx.moveTo(last_point.x + (dx * 0.2), last_point.y + (dy * 0.2));
-                        ctx.lineTo(current_point.x - (dx * 0.2), current_point.y - (dy * 0.2));
-                        ctx.stroke();
+                        draw.context.beginPath();
+                        draw.context.moveTo(last_point.x + (dx * 0.2), last_point.y + (dy * 0.2));
+                        draw.context.lineTo(current_point.x - (dx * 0.2), current_point.y - (dy * 0.2));
+                        draw.context.stroke();
                     }
                 }
 
                 // nearest neighbor furry
 //                if (d < 2000 && Math.random() > d / 2000) {
-//                    ctx.beginPath();
-//                    ctx.moveTo(last_point.x + (dx * 0.5), last_point.y + (dy * 0.5));
-//                    ctx.lineTo(last_point.x - (dx * 0.5), last_point.y - (dy * 0.5));
-//                    ctx.stroke();
+//                    draw.context.beginPath();
+//                    draw.context.moveTo(last_point.x + (dx * 0.5), last_point.y + (dy * 0.5));
+//                    draw.context.lineTo(last_point.x - (dx * 0.5), last_point.y - (dy * 0.5));
+//                    draw.context.stroke();
 //                }
             }
         }
     };
 
-    el.onmouseup = function () {
-        isDrawing = false;
-        points = [];
+    /**
+     * On mouse up binding
+     */
+    draw.onMouseUp = function () {
+        draw.isDrawing = false;
+        draw.points = [];
     };
 }(Draw));
 
@@ -154,10 +194,16 @@ var Helpers = {},
 
     toolbar.activeTool = 'pencil';
 
+    /**
+     * Initialize the toolbar
+     */
     toolbar.init = function () {
         this.bindButtons();
     };
 
+    /**
+     * Bind toolbar buttons
+     */
     toolbar.bindButtons = function () {
         var buttons = document.querySelectorAll('.toolbar .btn'),
             buttonsIteration = buttons.length,
@@ -174,6 +220,9 @@ var Helpers = {},
         }
     };
 
+    /**
+     * Toolbar button on click
+     */
     toolbar.onClick = function () {
         Helpers.removeClass(activeButton, 'active');
         Helpers.addClass(this, 'active');
