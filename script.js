@@ -85,7 +85,6 @@ var Helpers = {},
         draw.el.width = document.body.clientWidth - 50;
         draw.el.height = document.body.clientHeight;
 
-        draw.context.lineWidth = 1.2;
         draw.context.lineJoin = draw.context.lineCap = 'round';
     };
 
@@ -130,7 +129,7 @@ var Helpers = {},
 
         draw.context.globalCompositeOperation = "source-over";
         draw.context.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-        draw.context.lineWidth = 1;
+        draw.context.lineWidth = 2;
         if (Toolbar.activeTool === 'pencil') {
             draw.context.strokeStyle = 'rgba(255, 255, 255, 1)';
         }
