@@ -1,7 +1,9 @@
 /*jslint browser: true, plusplus: true, todo: true */
-var Helpers = {},
-    Draw = {},
-    Toolbar = {};
+var CanvasDraw = {
+    Helpers: {},
+    Draw: {},
+    Toolbar: {}
+};
 
 /**
  * Helpers
@@ -50,7 +52,7 @@ var Helpers = {},
         el.className = el.className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
         return true;
     };
-}(Helpers));
+}(CanvasDraw.Helpers));
 
 /**
  * Draw object
@@ -130,10 +132,10 @@ var Helpers = {},
         draw.context.globalCompositeOperation = "source-over";
         draw.context.strokeStyle = 'rgba(255, 255, 255, 0.1)';
         draw.context.lineWidth = 2;
-        if (Toolbar.activeTool === 'pencil') {
+        if (CanvasDraw.Toolbar.activeTool === 'pencil') {
             draw.context.strokeStyle = 'rgba(255, 255, 255, 1)';
         }
-        if (Toolbar.activeTool === 'eraser') {
+        if (CanvasDraw.Toolbar.activeTool === 'eraser') {
             draw.context.globalCompositeOperation = "destination-out";
             draw.context.strokeStyle = "rgba(0, 0, 0, 1)";
             draw.context.lineWidth = 15;
@@ -144,7 +146,7 @@ var Helpers = {},
         draw.context.lineTo(last_point.x, last_point.y);
         draw.context.stroke();
 
-        if (Toolbar.activeTool === 'brush1') {
+        if (CanvasDraw.Toolbar.activeTool === 'brush1') {
             while (len--) {
                 current_point = draw.points[len];
 
@@ -153,7 +155,7 @@ var Helpers = {},
 
                 d = dx * dx + dy * dy;
 
-                if (Toolbar.activeTool === 'brush1') {
+                if (CanvasDraw.Toolbar.activeTool === 'brush1') {
                     // nearest neighbor
                     if (d < 1000) {
                         draw.context.beginPath();
@@ -181,7 +183,7 @@ var Helpers = {},
         draw.isDrawing = false;
         draw.points = [];
     };
-}(Draw));
+}(CanvasDraw.Draw));
 
 /**
  * Toolbar object
@@ -212,7 +214,7 @@ var Helpers = {},
             button = buttons[buttonsIteration];
             button.addEventListener('click', this.onClick);
 
-            if (Helpers.hasClass(button, 'active')) {
+            if (CanvasDraw.Helpers.hasClass(button, 'active')) {
                 activeButton = button;
                 this.activeTool = button.getAttribute('tool');
             }
@@ -223,12 +225,12 @@ var Helpers = {},
      * Toolbar button on click
      */
     toolbar.onClick = function () {
-        Helpers.removeClass(activeButton, 'active');
-        Helpers.addClass(this, 'active');
+        CanvasDraw.Helpers.removeClass(activeButton, 'active');
+        CanvasDraw.Helpers.addClass(this, 'active');
         activeButton = this;
         toolbar.activeTool = this.getAttribute('tool');
     };
-}(Toolbar));
+}(CanvasDraw.Toolbar));
 
-Draw.init();
-Toolbar.init();
+CanvasDraw.Draw.init();
+CanvasDraw.Toolbar.init();
