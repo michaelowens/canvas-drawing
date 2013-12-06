@@ -149,7 +149,7 @@ var CanvasDraw = {
         draw.context.strokeStyle = CanvasDraw.Toolbar.activeColor; // 'rgba(255, 255, 255, 0.1)';
         draw.context.lineWidth = 2;
         if (CanvasDraw.Toolbar.activeTool === 'brush1') {
-            draw.context.strokeStyle = CanvasDraw.Helpers.changeOpacity(CanvasDraw.Toolbar.activeColor, '0.1')
+            draw.context.strokeStyle = CanvasDraw.Helpers.changeOpacity(CanvasDraw.Toolbar.activeColor, '0.1');
         }
         if (CanvasDraw.Toolbar.activeTool === 'eraser') {
             draw.context.globalCompositeOperation = "destination-out";
