@@ -55,6 +55,52 @@
         .toolbar .btn:hover {
             color: #fff;
         }
+
+        .toolbar .bottom {
+            position: absolute;
+            bottom: 0;
+        }
+
+        .toolbar .bottom .color {
+
+        }
+
+        .toolbar .color {
+            display: block;
+            width: 50px;
+            height: 20px;
+            border-top: 2px solid #2c3e50;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        .toolbar .color.active {
+            opacity: 1;
+        }
+
+        .toolbar .color.white {
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .toolbar .color.red {
+            background: rgba(255, 0, 0, 1);
+        }
+
+        .toolbar .color.amethyst {
+            background: rgba(155, 89, 182, 1);
+        }
+
+        .toolbar .color.emerald {
+            background: rgba(46, 204, 113, 1);
+        }
+
+        .toolbar .color.sunflower {
+            background: rgba(241, 196, 15, 1);
+        }
+
+        .toolbar .color.carrot {
+            background: rgba(230, 126, 34, 1);
+        }
     </style>
 </head>
 <body>
@@ -65,6 +111,15 @@
     <span tool="pencil" class="btn active fa fa-pencil"></span>
     <span tool="brush1" class="btn fa fa-certificate"></span>
     <span tool="eraser" class="btn fa fa-eraser"></span>
+
+    <div class="bottom">
+        <span color="rgba(255, 255, 255, 1)" class="color active white"></span>
+        <span color="rgba(255, 0, 0, 1)" class="color red"></span>
+        <span color="rgba(155, 89, 182, 1)" class="color amethyst"></span>
+        <span color="rgba(46, 204, 113, 1)" class="color emerald"></span>
+        <span color="rgba(241, 196, 15, 1)" class="color sunflower"></span>
+        <span color="rgba(230, 126, 34, 1)" class="color carrot"></span>
+    </div>
 </div>
 
 <script src="script.js"></script>

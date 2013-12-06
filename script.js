@@ -52,6 +52,22 @@ var CanvasDraw = {
         el.className = el.className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
         return true;
     };
+
+    helpers.parseColor = function (color) {
+        var cache;
+
+        color = color.replace(/\s\s*/g, '');
+        cache = /^rgba\((\d+),(\d+),(\d+),(\d+)\)/.exec(color);
+        cache = [+cache[1], +cache[2], +cache[3], +cache[4]];
+
+        return cache;
+    };
+
+    helpers.changeOpacity = function (color, opacity) {
+        var parsed = helpers.parseColor(color);
+        parsed[3] = opacity;
+        return 'rgba(' + parsed.join(',') + ')';
+    };
 }(CanvasDraw.Helpers));
 
 /**
@@ -130,10 +146,10 @@ var CanvasDraw = {
             dy;
 
         draw.context.globalCompositeOperation = "source-over";
-        draw.context.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        draw.context.strokeStyle = CanvasDraw.Toolbar.activeColor; // 'rgba(255, 255, 255, 0.1)';
         draw.context.lineWidth = 2;
-        if (CanvasDraw.Toolbar.activeTool === 'pencil') {
-            draw.context.strokeStyle = 'rgba(255, 255, 255, 1)';
+        if (CanvasDraw.Toolbar.activeTool === 'brush1') {
+            draw.context.strokeStyle = CanvasDraw.Helpers.changeOpacity(CanvasDraw.Toolbar.activeColor, '0.1')
         }
         if (CanvasDraw.Toolbar.activeTool === 'eraser') {
             draw.context.globalCompositeOperation = "destination-out";
@@ -191,15 +207,18 @@ var CanvasDraw = {
 (function (toolbar) {
     'use strict';
 
-    var activeButton;
+    var activeButton,
+        activeColorButton;
 
     toolbar.activeTool = 'pencil';
+    toolbar.activeColor = 'rgba(255, 255, 255, 1)';
 
     /**
      * Initialize the toolbar
      */
     toolbar.init = function () {
         this.bindButtons();
+        this.bindColors();
     };
 
     /**
@@ -222,6 +241,25 @@ var CanvasDraw = {
     };
 
     /**
+     * Bind toolbar colors
+     */
+    toolbar.bindColors = function () {
+        var buttons = document.querySelectorAll('.toolbar .color'),
+            buttonsIteration = buttons.length,
+            button;
+
+        while (buttonsIteration--) {
+            button = buttons[buttonsIteration];
+            button.addEventListener('click', this.onClickColor);
+
+            if (CanvasDraw.Helpers.hasClass(button, 'active')) {
+                activeColorButton = button;
+                this.activeColor = button.getAttribute('color');
+            }
+        }
+    };
+
+    /**
      * Toolbar button on click
      */
     toolbar.onClick = function () {
@@ -229,6 +267,16 @@ var CanvasDraw = {
         CanvasDraw.Helpers.addClass(this, 'active');
         activeButton = this;
         toolbar.activeTool = this.getAttribute('tool');
+    };
+
+    /**
+     * Toolbar color on click
+     */
+    toolbar.onClickColor = function () {
+        CanvasDraw.Helpers.removeClass(activeColorButton, 'active');
+        CanvasDraw.Helpers.addClass(this, 'active');
+        activeColorButton = this;
+        toolbar.activeColor = this.getAttribute('color');
     };
 }(CanvasDraw.Toolbar));
 
