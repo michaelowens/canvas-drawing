@@ -53,6 +53,11 @@ var CanvasDraw = {
         return true;
     };
 
+    /**
+     * Parse an RGBA color into an array
+     * @param color
+     * @returns {Array}
+     */
     helpers.parseColor = function (color) {
         var cache;
 
@@ -63,6 +68,12 @@ var CanvasDraw = {
         return cache;
     };
 
+    /**
+     * Change the opacity from an RGBA color
+     * @param color
+     * @param opacity
+     * @returns {string}
+     */
     helpers.changeOpacity = function (color, opacity) {
         var parsed = helpers.parseColor(color);
         parsed[3] = opacity;
